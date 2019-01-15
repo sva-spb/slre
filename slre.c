@@ -167,7 +167,7 @@ static int match_set(const char *re, int re_len, const char *s,
     if (re[len] != '-' && re[len + 1] == '-' && re[len + 2] != ']' &&
         re[len + 2] != '\0') {
       result = info->flags &  SLRE_IGNORE_CASE ?
-        tolower(*s) >= tolower(re[len]) && tolower(*s) <= tolower(re[len + 2]) :
+        tolower((unsigned char)*s) >= tolower((unsigned char)re[len]) && tolower((unsigned char)*s) <= tolower((unsigned char)re[len + 2]) :
         *s >= re[len] && *s <= re[len + 2];
       len += 3;
     } else {
@@ -389,8 +389,8 @@ static int foo(const char *re, int re_len, const char *s, int s_len,
         /* Hex digit specification must follow */
         FAIL_IF(re[i + 1] == 'x' && i >= re_len - 3,
                 SLRE_INVALID_METACHARACTER);
-        FAIL_IF(re[i + 1] ==  'x' && !(isxdigit(re[i + 2]) &&
-                isxdigit(re[i + 3])), SLRE_INVALID_METACHARACTER);
+        FAIL_IF(re[i + 1] ==  'x' && !(isxdigit((unsigned char)re[i + 2]) &&
+                isxdigit((unsigned char)re[i + 3])), SLRE_INVALID_METACHARACTER);
       } else {
         FAIL_IF(!is_metacharacter((const unsigned char *) re + i + 1),
                 SLRE_INVALID_METACHARACTER);
